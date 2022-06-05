@@ -50,3 +50,34 @@ for i in range(1, 11):
 
     f.write(f'{grade}위 팀명: {team} / 승: {win} / 패: {lose} / 무: {draw} / 승률: {winning_rate} \n' )
 f.close()
+
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from urllib.request import urlopen
+from bs4 import BeautifulSoup as bs
+from urllib.parse import quote_plus
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.by import By
+import time
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+browser = webdriver.Chrome('chromedriver', options=options)
+
+
+url = 'https://www.koreabaseball.com/Player/RegisterAll.aspx'
+browser.get(url)
+
+table = browser.find_element_by_class_name('tData.tDays')
+tbody = table.find_element_by_tag_name("tbody")
+row = tbody.find_elements_by_tag_name("tr")
+for index, value in enumerate(row):
+  for i in range(2, 6):
+    body=value.find_elements_by_tag_name("td")[i]
+    print(body.text) #KBO 현역 선수들 이름(번호) 뽑기
